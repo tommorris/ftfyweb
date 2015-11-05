@@ -1,4 +1,5 @@
-from flask import Flask, request
+import ftfy
+from flask import Flask, request, Response
 import os
 
 app = Flask(__name__)
@@ -9,8 +10,9 @@ def index():
 
 @app.route("/", methods=["POST"])
 def translate():
-    data = unicode(request.POST['text'])
-    return ftfy.fix_text(data)
+    data = unicode(request.form['text'])
+    headers = {"Content-Type": "text/plain; charset=UTF-8"}
+    return Response(ftfy.fix_text(data), 200, headers=headers)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
